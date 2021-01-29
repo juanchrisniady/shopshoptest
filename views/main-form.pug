@@ -1,0 +1,19 @@
+doctype html
+html
+    head
+        style
+            include ../public/stylesheets/style.css
+        title Login Form
+        link(rel="stylesheet" type="text/css" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css")
+    body
+        div.mainForm
+            form(method="POST", action="/submit")
+                div
+                    label(for = "username") Username:
+                    input(type = "text", name = "username")
+                br
+                div
+                    label(for = "password") Password:
+                    input(type = "password", name = "password")
+                br
+                input.pure-button.pure-button-primary(type = "submit", name = "submit", value = "submit") 
