@@ -40,7 +40,6 @@ a {
   /* tells the auto-placement algorithm to attempt to fill in holes earlier in the grid if smaller items come up later */
   grid-auto-flow: row;
   align-items: center;
-  max0
 }
 
 .radiocontainer label {
