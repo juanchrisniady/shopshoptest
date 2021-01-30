@@ -82,7 +82,7 @@ async function openSheet(data, auth) {
   // TODO promises or error handling for gapi
   // TODO change spreadsheet ID
   await sheets.spreadsheets.values.append({
-    spreadsheetId: "1AP5dh6SOhpVB-CQwbMeLiSkr5NEEEiIKvcohevEZUH8",
+    spreadsheetId: "1-55HjM_eQoFx7vUQKTHJbVIc7Y2J89dgod73HbtGECU",
     range: "Sheet1!A:A",
     valueInputOption: 'USER_ENTERED',
     insertDataOption: 'INSERT_ROWS',

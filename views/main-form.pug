@@ -9,6 +9,10 @@ html
         div.mainForm
             form(method="POST", action="/submit")
                 div
+                    label(for = "seller") Kode Penjual:
+                    input(type = "text", name = "seller")
+                br
+                div
                     label(for = "name") Nama:
                     input(type = "text", name = "name")
                 br
@@ -27,6 +31,14 @@ html
                 div
                     label(for = "state") Provinsi:
                     input(type = "text", name = "state")
+                br
+                div
+                    input(type = "radio", name = "shipping", id="jnt", value="jnt")
+                    label(for = "jnt") J&T
+                br
+                div
+                    input(type = "radio", name = "shipping", id="ninja", value="ninja")
+                    label(for = "ninja") NinjaVan
 
 				
                 input.pure-button.pure-button-primary(type = "submit", name = "submit", value = "submit") 
