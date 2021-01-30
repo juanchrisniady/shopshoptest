@@ -3,42 +3,46 @@ html
     head
         style
             include ../public/stylesheets/style.css
-        title Login Form
+        title Teknia Order Form
         link(rel="stylesheet" type="text/css" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css")
     body
+        div.banner
+            h1.bannerText Form pemesanan Teknia
         div.mainForm
             form(method="POST", action="/submit")
-                div
+                .perlabel
                     label(for = "seller") Kode Penjual:
                     input(type = "text", name = "seller")
                 br
-                div
+                .perlabel
                     label(for = "name") Nama:
                     input(type = "text", name = "name")
                 br
-                div
+                .perlabel
                     label(for = "phone") No Telp:
                     input(type = "text", name = "phone")
                 br
-                div
+                .perlabel
                     label(for = "address") Alamat:
                     input(type = "text", name = "address")
                 br
-                div
+                .perlabel
                     label(for = "city") Kota:
                     input(type = "text", name = "city")
                 br
-                div
+                .perlabel
                     label(for = "state") Provinsi:
                     input(type = "text", name = "state")
                 br
-                div
-                    input(type = "radio", name = "shipping", id="jnt", value="jnt")
-                    label(for = "jnt") J&T
-                br
-                div
-                    input(type = "radio", name = "shipping", id="ninja", value="ninja")
-                    label(for = "ninja") NinjaVan
+                .perlabel
+                    label(for = "shipping") Pemilihan kurir
+                    .radiocontainer
+                        input(type = "radio", name = "shipping", id="jnt", value="jnt")
+                        label(for = "jnt") J&T
+                    br
+                    .radiocontainer
+                        input(type = "radio", name = "shipping", id="ninja", value="ninja")
+                        label(for = "ninja") NinjaVan
 
-				
-                input.pure-button.pure-button-primary(type = "submit", name = "submit", value = "submit") 
+                br
+                input.pure-button.pure-button-primary.margin-top-20(type = "submit", name = "submit", value = "submit") 

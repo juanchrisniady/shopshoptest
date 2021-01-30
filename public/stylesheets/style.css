@@ -1,31 +1,56 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color:papayawhip;
 }
 
 a {
   color: #00B7FF;
 }
 
-.mainForm {
-  background-color: red;
-  margin: auto;
-  max-width: 66%;
+.banner {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.bannerText {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 36px;
 
-.mainForm label {
-
-  margin: 12px 20px;
 }
-.mainForm .submitButton {
 
-  margin-top: 12px;
-  align-self: center;
-  height: 25px;
-  width: 60px;
-  font-size: 20em;
-  border: 4px solid green;
+.mainForm {
+  margin: auto;
+  max-width: 40%;
+}
+
+.perlabel {
+  display: flex;
+  /* align-items: flex-start; */
+  justify-content:  space-between;
+}
+
+.perlabel label {
+
+  margin: 4px 20px;
+}
+
+.radiocontainer {
+  display: inline-grid;
+  /* tells the auto-placement algorithm to attempt to fill in holes earlier in the grid if smaller items come up later */
+  grid-auto-flow: row;
+  align-items: center;
+  max0
+}
+
+.radiocontainer label {
+  grid-column: 2;
+}
+
+/* Utilities classes */
+.margin-top-20 {
+  margin-top: 20px;
+}
+.margin-left-20 {
+  margin-top: 20px;
 }

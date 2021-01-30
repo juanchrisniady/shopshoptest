@@ -1,5 +1,5 @@
 const gapi = require("./utils/gapi");
-
+const validation = require("./utils/validation")
 const createError     = require('http-errors');
 const express         = require('express');
 const path            = require('path');
@@ -31,10 +31,15 @@ app.get('/', function(request, response){
 app.post('/submit', function(request, response){
 
   // log the response
-  console.log(request.body);
-  console.log(typeof request.body);
-  gapi.authenticateAndAppend(request.body);
-  response.render("thank-you");
+  const rowsToInsert = request.body;
+  console.log(rowsToInsert);
+  if (validation.validate(rowsToInsert)) {
+
+    gapi.authenticateAndAppend(rowsToInsert);
+    response.render("thank-you");
+  }
+
+  response.send("Invalid state province combination")
 });
 
 
