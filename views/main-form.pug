@@ -9,14 +9,24 @@ html
         div.mainForm
             form(method="POST", action="/submit")
                 div
-                    label(for = "username") Username:
-                    input(type = "text", name = "username")
-                br
-                div
-                    label(for = "password") Password:
-                    input(type = "password", name = "password")
-                br
-                div
                     label(for = "name") Nama:
                     input(type = "text", name = "name")
+                br
+                div
+                    label(for = "phone") No Telp:
+                    input(type = "text", name = "phone")
+                br
+                div
+                    label(for = "address") Alamat:
+                    input(type = "text", name = "address")
+                br
+                div
+                    label(for = "city") Kota:
+                    input(type = "text", name = "city")
+                br
+                div
+                    label(for = "state") Provinsi:
+                    input(type = "text", name = "state")
+
+				
                 input.pure-button.pure-button-primary(type = "submit", name = "submit", value = "submit") 
