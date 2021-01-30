@@ -46,6 +46,16 @@ a {
   grid-column: 2;
 }
 
+/* Thank you text */
+.thankyouContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  margin: auto;
+}
+
+
 /* Utilities classes */
 .margin-top-20 {
   margin-top: 20px;
