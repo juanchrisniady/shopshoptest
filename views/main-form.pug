@@ -18,19 +18,19 @@ html
                     input(type = "text", name = "seller")
                 br
                 .perlabel
-                    label(for = "name") Nama:
+                    label(for = "name") Nama Penerima:
                     input(type = "text", name = "name")
                 br
                 .perlabel
-                    label(for = "phone") No Telp:
+                    label(for = "phone") No Telp Penerima:
                     input(type = "text", name = "phone")
                 br
                 .perlabel
-                    label(for = "address") Alamat:
+                    label(for = "address") Alamat Penerima:
                     input(type = "text", name = "address")
                 br
                 .perlabel
-                    label(for = "address_id") Kec/Kota/Provinsi:
+                    label(for = "address_id") Kec/Kota/Provinsi Penerima:
                     input(name='address_id', id='address_id', list = 'addresslist')
                     datalist(id='addresslist')
                         each id, addr in Addresses ? Addresses : []
