@@ -7,8 +7,12 @@ const cookieParser    = require('cookie-parser');
 const bodyParser      = require('body-parser');
 const logger          = require('morgan');
 const multer          = require('multer');
+const request 		  = require("request");
 
 const app             = express();
+const ret = {};
+
+const ongkirapi = process.env.ONGKIR;
 
 // view engine setup
 app.set('view engine', 'pug');
@@ -22,13 +26,39 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', function(request, response){
+
+app.get('/', function(req, res){
   
   // Give main pug form
-  response.render('main-form');
+  
+		setup(req,res)
+		  
+  
 });
 
-//const { body, validationResult } = require('express-validator');
+function setup(req, res){
+		var options = {
+		  method: 'GET',
+		  url: 'https://pro.rajaongkir.com/api/city',
+		  qs: {},
+		  headers: {key: ongkirapi}
+		};
+		
+		request(options, function (error, response, body) {
+		  if (error) throw new Error(error);
+
+		  var obj = JSON.parse(body).rajaongkir.results;
+		  for(var i in obj) {
+			  ret[ obj[i]['city_name'] + ", " + obj[i]['province'] ] = obj[i]['city_id'] + ", " + obj[i]['city_name'] + ", " + obj[i]['province'];
+		  }
+		  
+		  res.render('main-form', {
+				Addresses: ret,
+				});
+		  // console.log(ret["Cirebon, Jawa Barat"]); // 109, 9
+		});
+}
+
 const { check, validationResult } = require('express-validator'); 
 
 app.post('/submit', [
@@ -40,11 +70,7 @@ app.post('/submit', [
 		.notEmpty(),
 	check('address')
 		.notEmpty(),
-	check('area')
-		.notEmpty(),
-	check('city')
-		.notEmpty(),
-	check('province')
+	check('address_id')
 		.notEmpty(),
 	check('shipping')
 		.notEmpty(),
@@ -53,14 +79,48 @@ app.post('/submit', [
 		const errors = validationResult(req);
 		const rowsToInsert = req.body;
 		console.log(rowsToInsert);
+		city_id = rowsToInsert["address_id"].split(', ')[0];
+		city = rowsToInsert["address_id"].split(', ')[1];
+		province = rowsToInsert["address_id"].split(', ')[2];
+		address = rowsToInsert["address"] 
+		courier = rowsToInsert["shipping"]
+		
 		if (!errors.isEmpty()) { 
 			const alert = errors.array();
-			res.render('main-form', {msg: 'Mohon isi data yang lengkap'});
+			res.render('main-form', {msg: 'Mohon isi data yang lengkap', Addresses: ret});
 		} else {
-			gapi.authenticateAndAppend(rowsToInsert);
 			res.render("thank-you");
+			
+			
+			var options = {
+			  method: 'POST',
+			  url: 'https://pro.rajaongkir.com/api/cost',
+			  headers: {key: ongkirapi, 'content-type': 'application/x-www-form-urlencoded'},
+			  form: {
+				origin: '109',
+				originType: 'city',
+				destination: city_id,
+				destinationType: 'city',
+				weight: 1290,
+				courier: courier
+			  }
+			};
+
+			request(options, function (error, response, body) {
+			  if (error) throw new Error(error);
+				var cost = JSON.parse(body).rajaongkir.results[0].costs[0].cost[0].value;
+				rowsToInsert['cost'] = cost;
+				rowsToInsert['province'] = province;
+				rowsToInsert['city'] = city;
+				console.log(rowsToInsert);
+				gapi.authenticateAndAppend(rowsToInsert);
+			});
+			
+			
+			
+			
+			
 			//req.flash('success', 'Subscription confirmed.');
-			//res.redirect('back');
 		}
 		
 	});

@@ -6,17 +6,23 @@ const readline         = require('readline')
 const SCOPES           = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH       = 'token.json';
 const CREDENTIALS_PATH = 'credentials.json'
+const sheetId		   = process.env.GOOGLE_SHEET;
 
 function authenticateAndAppend(data) {
   // Google API connectivity stuff
   console.log("===== READING GAPI ======");
 
   // Load client secrets from a local file.
+/**
   fs.readFile(CREDENTIALS_PATH, (err, content) => {
     if (err) return console.log('Error loading client secret file:', err);
     // Authorize a client with credentials, then call the Google Sheets API.
     authorize(JSON.parse(content), data, appendToSheet);
   });
+  **/
+
+  authorize(JSON.parse(process.env.GOOGLE_CREDENTIALS), data, appendToSheet);
+  
 }
 
 /**
@@ -32,12 +38,16 @@ function authorize(credentials, data, callback) {
   const oAuth2Client = new google.auth.OAuth2(
       client_id, client_secret, redirect_uris[0]);
 
+/**
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, (err, token) => {
     if (err) return getNewToken(oAuth2Client, callback);
     oAuth2Client.setCredentials(JSON.parse(token));
     callback(data, oAuth2Client);
   });
+  **/
+	oAuth2Client.setCredentials(JSON.parse(process.env.GOOGLE_TOKEN));
+    callback(data, oAuth2Client);
 }
 
 /**
@@ -77,7 +87,7 @@ async function appendToSheet(data, auth) {
   // TODO change spreadsheet ID
   console.log("===== APPENDING " + JSON.stringify(data) + "To Google sheets ");
   await sheets.spreadsheets.values.append({
-    spreadsheetId: "1AP5dh6SOhpVB-CQwbMeLiSkr5NEEEiIKvcohevEZUH8",
+    spreadsheetId: sheetId,
     range: "Sheet1!A:A",
     valueInputOption: 'USER_ENTERED',
     insertDataOption: 'INSERT_ROWS',

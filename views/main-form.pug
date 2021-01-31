@@ -28,19 +28,12 @@ html
                 .perlabel
                     label(for = "address") Alamat:
                     input(type = "text", name = "address")
-				
                 br
                 .perlabel
-                    label(for = "area") Kecamatan:
-                    input(type = "text", name = "area")
-                br
-                .perlabel
-                    label(for = "city") Kota:
-                    input(type = "text", name = "city")
-                br
-                .perlabel
-                    label(for = "province") Provinsi:
-                    input(type = "text", name = "province")
+                    label(for = "address_id") Provinsi:
+                    select(name='address_id', id='address_id')
+                        each id, addr in Addresses ? Addresses : []
+                            option(value = id)= addr
                 br
                 .perlabel
                     label(for = "shipping") Pemilihan kurir
@@ -49,7 +42,7 @@ html
                         label(for = "jnt") J&T
                     br
                     .radiocontainer
-                        input(type = "radio", name = "shipping", id="ninja", value="ninja")
-                        label(for = "ninja") NinjaVan
+                        input(type = "radio", name = "shipping", id="ninja", value="ninja", disabled = true)
+                        label(for = "ninja") NinjaVan (DALAM PERBAIKAN)
                 br
                 input.pure-button.pure-button-primary.margin-top-20.margin-left-20(type = "submit", name = "submit", value = "submit") 
