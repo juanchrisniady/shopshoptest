@@ -28,20 +28,61 @@ app.get('/', function(request, response){
   response.render('main-form');
 });
 
+//const { body, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator'); 
+
+app.post('/submit', [
+	check('seller', 'Email length should be 10 to 30 characters')
+		.notEmpty(),
+	check('name', 'Email length should be 10 to 30 characters')
+		.notEmpty(),
+	check('phone', 'Email length should be 10 to 30 characters')
+		.notEmpty(),
+	check('address', 'Email length should be 10 to 30 characters')
+		.notEmpty(),
+	check('area', 'Email length should be 10 to 30 characters')
+		.notEmpty(),
+	check('city', 'Email length should be 10 to 30 characters')
+		.notEmpty(),
+	check('province', 'Email length should be 10 to 30 characters')
+		.notEmpty(),
+	check('shipping', 'Email length should be 10 to 30 characters')
+		.notEmpty(),
+		
+	], (req, res) => {
+		const errors = validationResult(req);
+		const rowsToInsert = req.body;
+		console.log(rowsToInsert);
+		if (!errors.isEmpty()) { 
+			res.render("main-form");
+		} else {
+			gapi.authenticateAndAppend(rowsToInsert);
+			res.render("thank-you");
+		}
+		
+	});
+
+/**
 app.post('/submit', function(request, response){
 
   // log the response
   const rowsToInsert = request.body;
   console.log(rowsToInsert);
-  if (validation.validate(rowsToInsert)) {
-
-    gapi.authenticateAndAppend(rowsToInsert);
+  const seller = request.body.seller;
+  request.checkBody('seller', 'Please enter employee first name').notEmpty();
+  let errors = request.validationErrors();
+  if(errors)
+    {
+        response.render('emp_add', {
+            errors: errors
+        });
+    }
+  else {
+	  gapi.authenticateAndAppend(rowsToInsert);
     response.render("thank-you");
   }
-
-  response.send("Invalid state province combination")
 });
-
+**/
 
 app.get('/submit', function(request, response){
 
