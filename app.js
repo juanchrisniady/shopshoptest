@@ -32,21 +32,21 @@ app.get('/', function(request, response){
 const { check, validationResult } = require('express-validator'); 
 
 app.post('/submit', [
-	check('seller', 'Email length should be 10 to 30 characters')
+	check('seller', 'Mohon isi nama Penjual')
 		.notEmpty(),
-	check('name', 'Email length should be 10 to 30 characters')
+	check('name', 'Mohon isi nama penerima')
 		.notEmpty(),
-	check('phone', 'Email length should be 10 to 30 characters')
+	check('phone', 'Mohon isi nomor telpon')
 		.notEmpty(),
-	check('address', 'Email length should be 10 to 30 characters')
+	check('address', 'Mohon isi alamat')
 		.notEmpty(),
-	check('area', 'Email length should be 10 to 30 characters')
+	check('area', 'Mohon isi kecamatan')
 		.notEmpty(),
-	check('city', 'Email length should be 10 to 30 characters')
+	check('city', 'Mohon isi kota')
 		.notEmpty(),
-	check('province', 'Email length should be 10 to 30 characters')
+	check('province', 'Mohon isi provinsi')
 		.notEmpty(),
-	check('shipping', 'Email length should be 10 to 30 characters')
+	check('shipping', 'Mohon pilih jasa kirim')
 		.notEmpty(),
 		
 	], (req, res) => {
