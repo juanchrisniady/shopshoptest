@@ -97,22 +97,25 @@ app.post('/submit', [
 		const rowsToInsert = req.body;
 		console.log(rowsToInsert);
 		if(ret[rowsToInsert["address_id"]] == null ){
-			console.log(ret[rowsToInsert["address_id"]]);
 			res.render('main-form', {msg: 'Mohon isi data Kec/Kota/Provinsi yang benar', Addresses: ret});
 			return;
 		}
 		if(!valid_seller.includes(rowsToInsert["seller"])){
-			console.log(ret[rowsToInsert["address_id"]]);
 			res.render('main-form', {msg: 'Mohon isi Kode Penjual dengan benar', Addresses: ret});
 			return;
 		}
+		var phone = rowsToInsert["phone"];
+		if( !( phone.startsWith("08") || phone.startsWith("628") ) ){
+			res.render('main-form', {msg: 'Nomor telfon berawal 0 atau 62 jangan pakai tanda +', Addresses: ret});
+			return;
+		}
 		rowsToInsert["address_id"] = ret[rowsToInsert["address_id"]];
-		sub_id = rowsToInsert["address_id"].split(', ')[0];
-		subdistrict = rowsToInsert["address_id"].split(', ')[1];
-		city = rowsToInsert["address_id"].split(', ')[2];
-		province = rowsToInsert["address_id"].split(', ')[3];
-		address = rowsToInsert["address"] 
-		courier = rowsToInsert["shipping"]
+		var sub_id = rowsToInsert["address_id"].split(', ')[0];
+		var subdistrict = rowsToInsert["address_id"].split(', ')[1];
+		var city = rowsToInsert["address_id"].split(', ')[2];
+		var province = rowsToInsert["address_id"].split(', ')[3];
+		var address = rowsToInsert["address"] 
+		var courier = rowsToInsert["shipping"]
 		
 		if (!errors.isEmpty()) { 
 			const alert = errors.array();
