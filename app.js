@@ -32,21 +32,21 @@ app.get('/', function(request, response){
 const { check, validationResult } = require('express-validator'); 
 
 app.post('/submit', [
-	check('seller', 'Mohon isi nama Penjual')
+	check('seller')
 		.notEmpty(),
-	check('name', 'Mohon isi nama penerima')
+	check('name')
 		.notEmpty(),
-	check('phone', 'Mohon isi nomor telpon')
+	check('phone')
 		.notEmpty(),
-	check('address', 'Mohon isi alamat')
+	check('address')
 		.notEmpty(),
-	check('area', 'Mohon isi kecamatan')
+	check('area')
 		.notEmpty(),
-	check('city', 'Mohon isi kota')
+	check('city')
 		.notEmpty(),
-	check('province', 'Mohon isi provinsi')
+	check('province')
 		.notEmpty(),
-	check('shipping', 'Mohon pilih jasa kirim')
+	check('shipping')
 		.notEmpty(),
 		
 	], (req, res) => {
@@ -54,10 +54,13 @@ app.post('/submit', [
 		const rowsToInsert = req.body;
 		console.log(rowsToInsert);
 		if (!errors.isEmpty()) { 
-			res.render("main-form");
+			const alert = errors.array();
+			res.render('main-form', {msg: 'Mohon isi data yang lengkap'});
 		} else {
 			gapi.authenticateAndAppend(rowsToInsert);
 			res.render("thank-you");
+			//req.flash('success', 'Subscription confirmed.');
+			//res.redirect('back');
 		}
 		
 	});

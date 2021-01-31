@@ -10,6 +10,9 @@ html
             h1.bannerText Form pemesanan Teknia
         div.mainForm
             form(method="POST", action="/submit")
+                script.
+                    var msgStr = !{JSON.stringify(msg)};
+                    alert(msgStr)
                 .perlabel
                     label(for = "seller") Kode Penjual:
                     input(type = "text", name = "seller")
