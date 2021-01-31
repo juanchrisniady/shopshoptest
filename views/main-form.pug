@@ -30,10 +30,11 @@ html
                     input(type = "text", name = "address")
                 br
                 .perlabel
-                    label(for = "address_id") Provinsi:
-                    select(name='address_id', id='address_id')
+                    label(for = "address_id") Kec/Kota/Provinsi:
+                    input(name='address_id', id='address_id', list = 'addresslist')
+                    datalist(id='addresslist')
                         each id, addr in Addresses ? Addresses : []
-                            option(value = id)= addr
+                            option= addr
                 br
                 .perlabel
                     label(for = "shipping") Pemilihan kurir

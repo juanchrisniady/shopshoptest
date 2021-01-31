@@ -8,11 +8,14 @@ const bodyParser      = require('body-parser');
 const logger          = require('morgan');
 const multer          = require('multer');
 const request 		  = require("request");
+const fs              = require('fs');
 
 const app             = express();
 const ret = {};
+const valid_seller    = (process.env.VALID_SELLER).split(", ");
 
 const ongkirapi = process.env.ONGKIR;
+const SUBS_PATH = 'subdistrict.json'
 
 // view engine setup
 app.set('view engine', 'pug');
@@ -37,6 +40,19 @@ app.get('/', function(req, res){
 });
 
 function setup(req, res){
+	
+	fs.readFile(SUBS_PATH, (err, content) => {
+		if (err) return console.log('Error loading file:', err);
+		var data = JSON.parse(content)
+		for(var i in data){
+			ret[ data[i]['subdistrict_name'] + "," + data[i]['city'] + ", " + data[i]['province'] ] = data[i]['subdistrict_id'] + ", " + data[i]['subdistrict_name'] + "," + data[i]['city'] + ", " + data[i]['province'];
+		}
+		res.render('main-form', {
+				Addresses: ret,
+		});
+		
+	});
+	/**
 		var options = {
 		  method: 'GET',
 		  url: 'https://pro.rajaongkir.com/api/city',
@@ -57,6 +73,7 @@ function setup(req, res){
 				});
 		  // console.log(ret["Cirebon, Jawa Barat"]); // 109, 9
 		});
+		**/
 }
 
 const { check, validationResult } = require('express-validator'); 
@@ -79,9 +96,21 @@ app.post('/submit', [
 		const errors = validationResult(req);
 		const rowsToInsert = req.body;
 		console.log(rowsToInsert);
-		city_id = rowsToInsert["address_id"].split(', ')[0];
-		city = rowsToInsert["address_id"].split(', ')[1];
-		province = rowsToInsert["address_id"].split(', ')[2];
+		if(ret[rowsToInsert["address_id"]] == null ){
+			console.log(ret[rowsToInsert["address_id"]]);
+			res.render('main-form', {msg: 'Mohon isi data Kec/Kota/Provinsi yang benar', Addresses: ret});
+			return;
+		}
+		if(!valid_seller.includes(rowsToInsert["seller"])){
+			console.log(ret[rowsToInsert["address_id"]]);
+			res.render('main-form', {msg: 'Mohon isi Kode Penjual dengan benar', Addresses: ret});
+			return;
+		}
+		rowsToInsert["address_id"] = ret[rowsToInsert["address_id"]];
+		sub_id = rowsToInsert["address_id"].split(', ')[0];
+		subdistrict = rowsToInsert["address_id"].split(', ')[1];
+		city = rowsToInsert["address_id"].split(', ')[2];
+		province = rowsToInsert["address_id"].split(', ')[3];
 		address = rowsToInsert["address"] 
 		courier = rowsToInsert["shipping"]
 		
@@ -99,8 +128,8 @@ app.post('/submit', [
 			  form: {
 				origin: '109',
 				originType: 'city',
-				destination: city_id,
-				destinationType: 'city',
+				destination: sub_id,
+				destinationType: 'subdistrict',
 				weight: 1290,
 				courier: courier
 			  }
@@ -110,8 +139,10 @@ app.post('/submit', [
 			  if (error) throw new Error(error);
 				var cost = JSON.parse(body).rajaongkir.results[0].costs[0].cost[0].value;
 				rowsToInsert['cost'] = cost;
-				rowsToInsert['province'] = province;
+				rowsToInsert['subdistrict_id'] = sub_id;
+				rowsToInsert['subdistrict'] = subdistrict;
 				rowsToInsert['city'] = city;
+				rowsToInsert['province'] = province;
 				console.log(rowsToInsert);
 				gapi.authenticateAndAppend(rowsToInsert);
 			});
