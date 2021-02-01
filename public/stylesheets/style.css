@@ -35,11 +35,6 @@ a {
   margin: 4px 20px;
 }
 
-.perlabel biglabel {
-
-  margin: 12px 20px;
-}
-
 .radiocontainer {
   display: inline-grid;
   /* tells the auto-placement algorithm to attempt to fill in holes earlier in the grid if smaller items come up later */
