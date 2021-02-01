@@ -13,7 +13,7 @@ const fs              = require('fs');
 const app             = express();
 const ret = {};
 const valid_seller    = (process.env.VALID_SELLER).split(", ");
-
+const seller_price    = JSON.parse(process.env.SELLER_PRICE);
 const ongkirapi = process.env.ONGKIR;
 const SUBS_PATH = 'subdistrict.json'
 
@@ -110,6 +110,7 @@ app.post('/submit', [
 			return;
 		}
 		rowsToInsert["address_id"] = ret[rowsToInsert["address_id"]];
+		var seller_id = rowsToInsert["seller"];
 		var sub_id = rowsToInsert["address_id"].split(', ')[0];
 		var subdistrict = rowsToInsert["address_id"].split(', ')[1];
 		var city = rowsToInsert["address_id"].split(', ')[2];
@@ -142,6 +143,9 @@ app.post('/submit', [
 			  if (error) throw new Error(error);
 				var cost = JSON.parse(body).rajaongkir.results[0].costs[0].cost[0].value;
 				rowsToInsert['cost'] = cost;
+				price = seller_price[seller_id.toUpperCase()];
+				rowsToInsert['price'] = price;
+				rowsToInsert['total_cost'] = cost + price;
 				rowsToInsert['subdistrict_id'] = sub_id;
 				rowsToInsert['subdistrict'] = subdistrict;
 				rowsToInsert['city'] = city;
