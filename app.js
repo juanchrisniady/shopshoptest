@@ -105,7 +105,7 @@ app.post('/submit', [
 			return;
 		}
 		var phone = rowsToInsert["phone"];
-		if( isNan(phone) || !( phone.startsWith("08") || phone.startsWith("628") ) ){
+		if( isNaN(phone) || !( phone.startsWith("08") || phone.startsWith("628") ) ){
 			res.render('main-form', {msg: 'Nomor telfon berawal 0 atau +62 jangan pakai spasi', Addresses: ret});
 			return;
 		}
