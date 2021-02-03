@@ -1,5 +1,4 @@
 const gapi = require("./utils/gapi");
-const validation = require("./utils/validation")
 const createError     = require('http-errors');
 const express         = require('express');
 const path            = require('path');
@@ -7,7 +6,7 @@ const cookieParser    = require('cookie-parser');
 const bodyParser      = require('body-parser');
 const logger          = require('morgan');
 const multer          = require('multer');
-const request 		  = require("request");
+const request 		    = require("request");
 const fs              = require('fs');
 const moment          = require('moment');
 
@@ -15,12 +14,12 @@ const app             = express();
 const ret = {};
 const valid_seller    = (process.env.VALID_SELLER).split(", ");
 const seller_price    = JSON.parse(process.env.SELLER_PRICE);
-const ongkirapi = process.env.ONGKIR;
-const SUBS_PATH = 'subdistrict.json'
+const ongkirapi       = process.env.ONGKIR;
 
-
+const SUBS_PATH       = 'subdistrict.json'
 const ORDER_ID_NAME = "TEKNIA";
 const ORDER_ID_LOW = 1020;
+// bad use of global var but is ok
 var ORDER_ID_CURR = 0;
 
 
@@ -39,25 +38,33 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', function(req, res){
   
   // Give main pug form
-  
 		setup(req,res)
-		  
-  
 });
 
+/** Utils and helper functions */
+
+
+/** Main routes */
 function setup(req, res){
 	
 	fs.readFile(SUBS_PATH, (err, content) => {
 		if (err) return console.log('Error loading file:', err);
-		var data = JSON.parse(content)
-		for(var i in data){
-			ret[ data[i]['subdistrict_name'] + ", " + data[i]['city'] + ", " + data[i]['province'] ] = data[i]['subdistrict_id'] + ", " + data[i]['subdistrict_name'] + ", " + data[i]['city'] + ", " + data[i]['province'];
-		}
+		const subdistricts = JSON.parse(content)
+		for(const subdistrict in subdistricts) {
+
+      // FIXME ini apaan, rename subKey and subValue with somethin nicer
+      const subKey = data[subdistrict]['subdistrict_name'] + ", " + data[subdistrict]['city'] + ", " + data[subdistrict]['province']
+      const subValue = data[subdistrict]['subdistrict_id'] + ", " + data[subdistrict]['subdistrict_name'] + ", " + data[subdistrict]['city'] + ", " + data[subdistrict]['province']
+      
+      ret[subKey] = subValue
+    }
+    
 		res.render('main-form', {
 				Addresses: ret,
 		});
 		
-	});
+  });
+  // FIXME hapus dead comment code
 	/**
 		var options = {
 		  method: 'GET',
@@ -97,11 +104,13 @@ app.post('/submit', [
 		.notEmpty(),
 	check('shipping')
 		.notEmpty(),
-		
 	], (req, res) => {
+
 		const errors = validationResult(req);
 		const rowsToInsert = req.body;
-		console.log(rowsToInsert);
+    console.log(rowsToInsert);
+    
+    // ======================= FIXME START EXTRACT HERE TO new function ================== //
 		if(ret[rowsToInsert["address_id"]] == null ){
 			res.render('main-form', {msg: 'Mohon isi data Kec/Kota/Provinsi yang benar', Addresses: ret});
 			return;
@@ -114,8 +123,11 @@ app.post('/submit', [
 		if( isNaN(phone) || !( phone.startsWith("08")  )){
 			res.render('main-form', {msg: 'Nomor telfon berawal 08, jangan pakai spasi', Addresses: ret});
 			return;
-		}
-		rowsToInsert["address_id"] = ret[rowsToInsert["address_id"]];
+    }
+    // ========================= END extract here ===================== //
+
+    rowsToInsert["address_id"] = ret[rowsToInsert["address_id"]];
+    
 		var seller_id = rowsToInsert["seller"];
 		var sub_id = rowsToInsert["address_id"].split(', ')[0];
 		var subdistrict = rowsToInsert["address_id"].split(', ')[1];
@@ -123,9 +135,12 @@ app.post('/submit', [
 		var province = rowsToInsert["address_id"].split(', ')[3];
 		var address = rowsToInsert["address"] 
 		var courier = rowsToInsert["shipping"]
-		ORDER_ID_CURR++;
+		ORDER_ID_CURR++; // Move this to somewhere that makes is logical, not directly before this is being used
 		var currOrderNum = ORDER_ID_CURR + ORDER_ID_LOW;
-		var currOrderId = ORDER_ID_NAME + currOrderNum;
+    var currOrderId = ORDER_ID_NAME + currOrderNum;
+    
+    // FIXME Move this right after validationResult(req), why process stuff if we know there is an error
+    // refactor the else out
 		if (!errors.isEmpty()) { 
 			const alert = errors.array();
 			res.render('main-form', {msg: 'Mohon isi data yang lengkap', Addresses: ret});
@@ -148,7 +163,8 @@ app.post('/submit', [
 			};
 
 			request(options, function (error, response, body) {
-			  if (error) throw new Error(error);
+        if (error) throw new Error(error);
+        // FIXMEYo refactor
 				var cost = JSON.parse(body).rajaongkir.results[0].costs[0].cost[0].value;
 				rowsToInsert['cost'] = cost;
 				price = seller_price[seller_id.toUpperCase()];
@@ -163,7 +179,7 @@ app.post('/submit', [
 				rowsToInsert['status'] = "0";
 				rowsToInsert['finish_data'] = "";
 				rowsToInsert["address_id"] = currOrderId;
-				console.log(rowsToInsert);
+				console.log(rowsToInsert); 
 				gapi.authenticateAndAppend(rowsToInsert);
 			});
 			
@@ -189,9 +205,18 @@ app.post('/checkorder', [
 		}
 		var sid = rowsToInsert["checkSid"];
 		//var data = {"a":["A1","B1","C1","D1", "E1","F1","G1","H1"], "b":["A12","B12","C12","D12", "E12","F12","G12","H2"]};
-		var data = gapi.authenticateAndGet(sid) ;
+		var data = gapi.authenticateAndGet(sid) ; // FIXME dont use data as a variable name
 		data.then(function(result) {
-			var orders = {};
+      var orders = {};
+      /**
+       * FIXME
+       * 1. var i -> const i
+       * 2. x[15] assign ke variable name that makes sense
+       * 3. result -> rename to response
+       * 4. var x -> rename lagi, pake const
+       * 5. Consider array deconstruction
+       * 6. linting pls
+       */
 			for(var i = 0; i < result.length; i++){
 				if((result[i][0]).toUpperCase() == sid.toUpperCase()){
 					var x = result[i]
@@ -202,12 +227,13 @@ app.post('/checkorder', [
 						stat= "Gagal Kirim";
 					} else if(parseInt(x[15]) == 2){
 						stat= "Selesai (Terkirim)"
-					}
+          }
+          // FIXME wtf
 					orders[i] = [x[1], x[10],x[12],x[2],x[13],x[14],stat,x[16]];
 				}
-			}
+      }
+      
 			res.render("cek-pesanan", {orders:orders});
-			
 		})
 		
 		//name, subs, province, phone, order_date, waybill, status, end_date
@@ -216,7 +242,7 @@ app.post('/checkorder', [
 	
 	
 
-
+// FIXME ini dikomen?
 /**
 app.post('/submit', function(request, response){
 
@@ -239,20 +265,22 @@ app.post('/submit', function(request, response){
 });
 **/
 
+
+/** Return the user to the main page if they go to submit with a GET request */
 app.get('/submit', function(request, response){
 
-  // log the response
-  console.log(request.body);
   response.redirect("/");
 });
-// error handling code - to catch invalid  URL and
+
+// error handling code - to catch any other error
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler - for all other errors
+// error handler - special error handler to print error message to browser
+// TODO The entire function should only be enabled on dev mode 
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
