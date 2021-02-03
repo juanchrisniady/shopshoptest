@@ -20,7 +20,7 @@ function authenticateAndGet(data) {
   var data = authorize(JSON.parse(content), data, getFromSheet);
   **/
 
-  var data = authorize(JSON.parse(process.env.GOOGLE_CREDENTIALS), data, appendToSheet);
+  var data = authorize(JSON.parse(process.env.GOOGLE_CREDENTIALS), data, getFromSheet);
 
   
   data.then(function(result) {
