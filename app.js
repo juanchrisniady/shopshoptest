@@ -18,6 +18,12 @@ const seller_price    = JSON.parse(process.env.SELLER_PRICE);
 const ongkirapi = process.env.ONGKIR;
 const SUBS_PATH = 'subdistrict.json'
 
+
+const ORDER_ID_NAME = "TEKNIA";
+const ORDER_ID_LOW = 1000;
+var ORDER_ID_CURR = 0;
+
+
 // view engine setup
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -117,7 +123,9 @@ app.post('/submit', [
 		var province = rowsToInsert["address_id"].split(', ')[3];
 		var address = rowsToInsert["address"] 
 		var courier = rowsToInsert["shipping"]
-		
+		ORDER_ID_CURR++;
+		var currOrderNum = ORDER_ID_CURR + ORDER_ID_LOW;
+		var currOrderId = ORDER_ID_NAME + currOrderNum;
 		if (!errors.isEmpty()) { 
 			const alert = errors.array();
 			res.render('main-form', {msg: 'Mohon isi data yang lengkap', Addresses: ret});
@@ -154,6 +162,7 @@ app.post('/submit', [
 				rowsToInsert['waybill'] = "";
 				rowsToInsert['status'] = "Belum Terkirim";
 				rowsToInsert['finish_data'] = "";
+				rowsToInsert["address_id"] = currOrderId;
 				console.log(rowsToInsert);
 				gapi.authenticateAndAppend(rowsToInsert);
 			});
