@@ -20,7 +20,7 @@ const SUBS_PATH = 'subdistrict.json'
 
 
 const ORDER_ID_NAME = "TEKNIA";
-const ORDER_ID_LOW = 1000;
+const ORDER_ID_LOW = 1020;
 var ORDER_ID_CURR = 0;
 
 
@@ -160,7 +160,7 @@ app.post('/submit', [
 				rowsToInsert['province'] = province;
 				rowsToInsert['order_date'] = moment().format("YYYY-MM-DD");
 				rowsToInsert['waybill'] = "";
-				rowsToInsert['status'] = "Belum Terkirim";
+				rowsToInsert['status'] = "0";
 				rowsToInsert['finish_data'] = "";
 				rowsToInsert["address_id"] = currOrderId;
 				console.log(rowsToInsert);
@@ -195,7 +195,15 @@ app.post('/checkorder', [
 			for(var i = 0; i < result.length; i++){
 				if((result[i][0]).toUpperCase() == sid.toUpperCase()){
 					var x = result[i]
-					orders[i] = [x[1], x[10],x[12],x[2],x[13],x[14],x[15],x[16]];
+					var stat = "";
+					if(parseInt(x[15]) == 0){
+						stat= "Dalam Pengiriman";
+					} else if(parseInt(x[15]) == 1) {
+						stat= "Gagal Kirim";
+					} else if(parseInt(x[15]) == 2){
+						stat= "Selesai (Terkirim)"
+					}
+					orders[i] = [x[1], x[10],x[12],x[2],x[13],x[14],stat,x[16]];
 				}
 			}
 			res.render("cek-pesanan", {orders:orders});
