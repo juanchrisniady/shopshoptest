@@ -186,7 +186,7 @@ app.post('/checkorder', [
 			for(var i = 0; i < result.length; i++){
 				if((result[i][0]).toUpperCase() == sid.toUpperCase()){
 					var x = result[i]
-					orders[i] = [x[1], x[11],x[13],x[2],x[14],x[15],x[16],x[17]];
+					orders[i] = [x[1], x[10],x[12],x[2],x[13],x[14],x[15],x[16]];
 				}
 			}
 			res.render("cek-pesanan", {orders:orders});
