@@ -76,7 +76,6 @@ function authorize(credentials, data, callback) {
   **/
 
   oAuth2Client.setCredentials(JSON.parse(process.env.GOOGLE_TOKEN));
-    callback(data, oAuth2Client);
 
   
   var data = callback(data, oAuth2Client);
