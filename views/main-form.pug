@@ -5,6 +5,7 @@ html
             include ../public/stylesheets/style.css
         title Teknia Order Form
         link(rel="stylesheet" type="text/css" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js")
     body
         div.banner
             h1.bannerText Form pemesanan Teknia
@@ -47,7 +48,7 @@ html
                         label(for = "ninja") NinjaVan (DALAM PERBAIKAN)
 
                 .wrapper
-                  input.pure-button.pure-button-primary.margin-top-20.margin-left-20(type = "submit", name = "submit", value = "BUAT PESANAN") 
+                  input.pure-button.pure-button-primary.margin-top-20.margin-left-20(type = "submit", name = "submit", value = "BUAT PESANAN", onclick = "this.form.submit(); this.disabled=true") 
         div.banner
             h1.bannerText Cek Status Pesanan
         div.checkOrder
@@ -56,4 +57,4 @@ html
                     label(for = "checkSid") Kode Penjual:
                     input(type = "text", name = "checkSid")
                 .wrapper
-                  input.pure-button.pure-button-primary.margin-top-20.margin-left-20(type = "submit", name = "submit", value = "CEK PESANAN") 
+                  input.pure-button.pure-button-primary.margin-top-20.margin-left-20(type = "submit", name = "submit", value = "CEK PESANAN", onclick = "this.form.submit(); this.disabled=true") 
