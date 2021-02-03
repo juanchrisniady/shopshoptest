@@ -1,0 +1,49 @@
+doctype html
+mixin session(name, subs, province, phone, order_date, waybill, status, end_date)
+  tr
+    td.session(data-sort-value="#{name}")
+      .flex.sm
+        div
+          a.name(href="#") #{name}
+          div
+            span.phone #{phone}&nbsp;-&nbsp;
+            span.subs #{subs},&nbsp;
+            span.prov #{province}
+    td.min(data-label="order_date") #{order_date}
+    td.min(data-label="waybill") #{waybill}
+    td.min(data-label="status") #{status}
+    td.min(data-label="end_date") #{end_date}
+        
+html
+    head
+        title Teknia Order Form
+        style
+            include ../public/stylesheets/checkorderstyle.css
+
+        link(rel="stylesheet" type="text/css" href="https://unpkg.com/purecss@2.0.5/build/pure-min.css")
+    body
+        
+        div.backForm
+            form(method="GET", action="/")
+                input.pure-button.pure-button-primary.margin-top-20.margin-left-20(type = "submit", name = "BACK", value = "BACK")
+        div.banner
+            h1.bannerText Cek Status Pesanan
+        div.mainForm
+           .container
+             .event-registration.reset
+               .content.wide
+                 .row-inset
+                   table.table-default.table-striped.table-bordered.sortable
+                     thead(data-header="true")
+                       tr
+                         th(data-sort-column="true") Penerima
+                         th(data-sort-column="true") Tanggal_Beli
+                         th(data-sort-column="true") Resi
+                         th(data-sort-column="true") Status
+                         th(data-sort-column="true") Waktu_Selesai
+                     tbody(data-body="true")
+                       each order in orders ? orders : []
+                           +session(order[0],order[1],order[2],order[3], order[4],order[5],order[6], order[7])
+
+
+        

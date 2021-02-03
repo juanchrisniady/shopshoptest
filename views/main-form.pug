@@ -45,5 +45,15 @@ html
                     .radiocontainer
                         input(type = "radio", name = "shipping", id="ninja", value="ninja", disabled = true)
                         label(for = "ninja") NinjaVan (DALAM PERBAIKAN)
-                br
-                input.pure-button.pure-button-primary.margin-top-20.margin-left-20(type = "submit", name = "submit", value = "submit") 
+
+                .wrapper
+                  input.pure-button.pure-button-primary.margin-top-20.margin-left-20(type = "submit", name = "submit", value = "BUAT PESANAN") 
+        div.banner
+            h1.bannerText Cek Status Pesanan
+        div.checkOrder
+            form(method="POST", action="/checkorder")
+                .perlabel
+                    label(for = "checkSid") Kode Penjual:
+                    input(type = "text", name = "checkSid")
+                .wrapper
+                  input.pure-button.pure-button-primary.margin-top-20.margin-left-20(type = "submit", name = "submit", value = "CEK PESANAN") 

@@ -1,0 +1,227 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color:papayawhip;
+}
+
+a {
+	 color: #4a90e2;
+}
+ .container {
+	 padding-top: 40px;
+}
+ h3 {
+	 margin-bottom: 30px;
+	 font-weight: 300;
+}
+ .table-default {
+	 width: 100%;
+}
+ .table-default thead > tr > th {
+	 font-weight: 500;
+	 font-size: 12px;
+	 text-transform: uppercase;
+	 position: relative;
+}
+ .table-default thead > tr > th:not(:first-of-type) {
+	 border-left: 1px solid #eee;
+}
+ .table-default thead > tr > th:not(:last-of-type) {
+	 border-right: 1px solid #eee;
+}
+ .table-default tbody > tr > td {
+	 padding: 10px;
+	 vertical-align: top;
+	 color: #888;
+}
+ .table-default.table-striped tbody tr:nth-of-type(odd) {
+	 background: rgba(0, 0, 0, 0.025);
+}
+ @media screen and (max-width: 767px) {
+	 .table-default {
+		 border: 0;
+	}
+	 .table-default thead {
+		 display: none;
+	}
+	 .table-default tr {
+		 margin-bottom: 10px;
+		 display: block;
+		 border: 1px solid #eee;
+		 background: white;
+	}
+	 .table-default td {
+		 text-align: right;
+		 font-size: 13px;
+		 border-bottom: 1px solid #eee;
+		 border-top: 0 !important;
+	}
+	 .table-default td:last-child {
+		 border-bottom: 0;
+	}
+	 .table-default td:before {
+		 content: attr(data-label);
+		 float: left;
+		 text-transform: uppercase;
+	}
+	 .table-default tbody td, .table-default tbody th {
+		 display: block !important;
+	}
+	 .table-default .block-column {
+		 text-align: left;
+	}
+	 .table-default .block-column:before {
+		 float: none;
+		 display: block;
+		 margin-bottom: 5px;
+	}
+}
+ .sortable-header-link {
+	 color: #444;
+	 padding: 10px 40px 10px 10px;
+	 display: flex;
+}
+ .icon {
+	 width: 18px;
+	 height: 18px;
+	 background-size: cover;
+	 display: block;
+	 position: absolute;
+	 top: calc(50% - 9px);
+	 right: 10px;
+	 margin-left: auto;
+}
+ .icon.toggle {
+	 background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/5102/arrows-24px-glyph-2_select-83.svg');
+	 opacity: 0.2;
+	 background-position: 5px 0;
+}
+ .icon.toggle-down {
+	 background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/5102/design-24px-outline-2_move-down.svg');
+}
+ .icon.toggle-up {
+	 background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/5102/design-24px-outline-2_move-up.svg');
+}
+ .table-default > thead > tr > th.min {
+	 min-width: 200px;
+	 white-space: nowrap;
+}
+ .table-default > thead > tr > th > a:hover, .table-default > thead > tr > th > a:active, .table-default > thead > tr > th > a:focus {
+	 background: rgba(74, 144, 226, 0.1);
+	 color: #444;
+	 text-decoration: none;
+}
+ .table-default > tbody > tr > td {
+	 width: 100%;
+}
+ @media (min-width: 768px) {
+	 .table-default > tbody > tr > td.min {
+		 width: 1%;
+		 min-width: 120px;
+		 white-space: nowrap;
+	}
+}
+ .table-default .name {
+	 font-weight: 500;
+}
+ .table-default .level {
+	 text-transform: uppercase;
+	 font-weight: 500;
+	 font-size: 12px;
+	 color: #555;
+}
+ @media (min-width: 768px) {
+	 .table-default .level {
+		 margin-left: auto;
+	}
+}
+ @media (max-width: 767px) {
+	 .table-default .session {
+		 text-align: left;
+	}
+}
+ .table-default .remove {
+	 padding: 10px;
+}
+ @media (min-width: 768px) {
+	 .table-default .remove {
+		 width: 1%;
+	}
+}
+ .table-default .remove > a > span {
+	 display: none;
+}
+ @media (max-width: 767px) {
+	 .table-default .remove {
+		 text-align: left;
+		 padding-left: 20px;
+	}
+	 .table-default .remove a {
+		 display: flex;
+		 align-items: center;
+	}
+	 .table-default .remove a > span {
+		 display: block;
+		 padding-left: 4px;
+		 color: #444;
+		 font-weight: 500;
+		 display: block;
+	}
+}
+ .table-default .remove a {
+	 opacity: 0.3;
+}
+ .table-default .remove a img {
+	 width: 20px;
+	 height: 20px;
+}
+ .table-default .remove a:hover {
+	 opacity: 1;
+}
+ .flex {
+	 width: 100%;
+}
+ .flex.all {
+	 display: flex;
+}
+ @media (min-width: 768px) {
+	 .flex.sm {
+		 display: flex;
+	}
+}
+ @media (min-width: 991px) {
+	 .flex.md {
+		 display: flex;
+	}
+}
+ @media (min-width: 1200px) {
+	 .flex.lg {
+		 display: flex;
+	}
+}
+ .flex.align-start {
+	 align-items: flex-start;
+}
+ .flex.align-center {
+	 align-items: center;
+}
+ .flex.justify-between {
+	 justify-content: space-between;
+}
+ 
+
+.checkOrder {
+  margin: auto;
+  max-width: 40%;  
+}
+
+
+
+
+/* Utilities classes */
+.margin-top-20 {
+  margin-top: 20px;
+}
+.margin-left-20 {
+  margin-top: 20px;
+}

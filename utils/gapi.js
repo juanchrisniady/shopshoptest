@@ -8,21 +8,51 @@ const TOKEN_PATH       = 'token.json';
 const CREDENTIALS_PATH = 'credentials.json'
 const sheetId		   = process.env.GOOGLE_SHEET;
 
+
+
+function authenticateAndGet(data) {
+  // Google API connectivity stuff
+  console.log("===== READING GAPI ======");
+
+  // Load client secrets from a local file.
+  /**
+  const content = fs.readFileSync(CREDENTIALS_PATH);
+  var data = authorize(JSON.parse(content), data, getFromSheet);
+  **/
+
+  var data = authorize(JSON.parse(process.env.GOOGLE_CREDENTIALS), data, appendToSheet);
+
+  
+  data.then(function(result) {
+   //console.log(result)
+  })
+  return data;
+  
+
+
+}
+
 function authenticateAndAppend(data) {
   // Google API connectivity stuff
   console.log("===== READING GAPI ======");
 
   // Load client secrets from a local file.
-/**
-  fs.readFile(CREDENTIALS_PATH, (err, content) => {
-    if (err) return console.log('Error loading client secret file:', err);
-    // Authorize a client with credentials, then call the Google Sheets API.
-    authorize(JSON.parse(content), data, appendToSheet);
-  });
+  /**
+  const content = fs.readFileSync(CREDENTIALS_PATH);
+  var data = authorize(JSON.parse(content), data, appendToSheet);
   **/
 
-  authorize(JSON.parse(process.env.GOOGLE_CREDENTIALS), data, appendToSheet);
+  var data = authorize(JSON.parse(process.env.GOOGLE_CREDENTIALS), data, appendToSheet);
+
   
+  
+  data.then(function(result) {
+   //console.log(result)
+  })
+  return data;
+  
+
+
 }
 
 /**
@@ -38,16 +68,24 @@ function authorize(credentials, data, callback) {
   const oAuth2Client = new google.auth.OAuth2(
       client_id, client_secret, redirect_uris[0]);
 
-/**
+
   // Check if we have previously stored a token.
-  fs.readFile(TOKEN_PATH, (err, token) => {
-    if (err) return getNewToken(oAuth2Client, callback);
-    oAuth2Client.setCredentials(JSON.parse(token));
-    callback(data, oAuth2Client);
-  });
+  /**
+  const token = fs.readFileSync(TOKEN_PATH);
+  oAuth2Client.setCredentials(JSON.parse(token));
   **/
-	oAuth2Client.setCredentials(JSON.parse(process.env.GOOGLE_TOKEN));
+
+  oAuth2Client.setCredentials(JSON.parse(process.env.GOOGLE_TOKEN));
     callback(data, oAuth2Client);
+
+  
+  var data = callback(data, oAuth2Client);
+  data.then(function(result) {
+   //console.log(result)
+  })
+  return data;
+
+
 }
 
 /**
@@ -86,7 +124,7 @@ async function appendToSheet(data, auth) {
   // TODO promises or error handling for gapi
   // TODO change spreadsheet ID
   console.log("===== APPENDING " + JSON.stringify(data) + "To Google sheets ");
-  await sheets.spreadsheets.values.append({
+  var res = await sheets.spreadsheets.values.append({
     spreadsheetId: sheetId,
     range: "Sheet1!A:A",
     valueInputOption: 'USER_ENTERED',
@@ -97,6 +135,18 @@ async function appendToSheet(data, auth) {
   },
   })
   console.log("===== APPEND COMPLETE =====");
+  return res.data.values;
 }
 
-module.exports = { authenticateAndAppend }
+async function getFromSheet(data, auth) {
+  const sheets = google.sheets({version: 'v4', auth});
+  var res = await sheets.spreadsheets.values.get({
+    spreadsheetId: sheetId,
+    range: "Sheet1!A:Z",
+  });
+  //console.log(x.data.values);
+  return res.data.values;
+
+}
+
+module.exports = { authenticateAndGet, authenticateAndAppend }

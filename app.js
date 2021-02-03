@@ -9,6 +9,7 @@ const logger          = require('morgan');
 const multer          = require('multer');
 const request 		  = require("request");
 const fs              = require('fs');
+const moment          = require('moment');
 
 const app             = express();
 const ret = {};
@@ -28,7 +29,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 app.get('/', function(req, res){
   
@@ -150,6 +150,10 @@ app.post('/submit', [
 				rowsToInsert['subdistrict'] = subdistrict;
 				rowsToInsert['city'] = city;
 				rowsToInsert['province'] = province;
+				rowsToInsert['order_date'] = moment().format("YYYY-MM-DD");
+				rowsToInsert['waybill'] = "";
+				rowsToInsert['status'] = "Belum Terkirim";
+				rowsToInsert['finish_data'] = "";
 				console.log(rowsToInsert);
 				gapi.authenticateAndAppend(rowsToInsert);
 			});
@@ -162,6 +166,39 @@ app.post('/submit', [
 		}
 		
 	});
+
+app.post('/checkorder', [
+	check('checkSid')
+		.notEmpty()
+		
+	], (req, res) => {
+		const errors = validationResult(req);
+		const rowsToInsert = req.body;
+		if(!valid_seller.includes(rowsToInsert["checkSid"])){
+			res.render('main-form', {msg: 'Mohon isi Kode Penjual dengan benar', Addresses: ret});
+			return;
+		}
+		var sid = rowsToInsert["checkSid"];
+		//var data = {"a":["A1","B1","C1","D1", "E1","F1","G1","H1"], "b":["A12","B12","C12","D12", "E12","F12","G12","H2"]};
+		var data = gapi.authenticateAndGet(sid) ;
+		data.then(function(result) {
+			var orders = {};
+			for(var i = 0; i < result.length; i++){
+				if((result[i][0]).toUpperCase() == sid.toUpperCase()){
+					var x = result[i]
+					orders[i] = [x[1], x[11],x[13],x[2],x[14],x[15],x[16],x[17]];
+				}
+			}
+			res.render("cek-pesanan", {orders:orders});
+			
+		})
+		
+		//name, subs, province, phone, order_date, waybill, status, end_date
+		//res.render("cek-pesanan", {orders:data});
+	});
+	
+	
+
 
 /**
 app.post('/submit', function(request, response){
@@ -208,6 +245,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.send(err.message)
 });
+
 
 //listens to server at port 3000
 app.listen(8000);
