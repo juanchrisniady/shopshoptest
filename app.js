@@ -95,6 +95,8 @@ app.post('/submit', [
 		.notEmpty(),
 	check('address_id')
 		.notEmpty(),
+	check('price')
+		.notEmpty(),
 	check('shipping')
 		.notEmpty(),
 		
@@ -113,6 +115,11 @@ app.post('/submit', [
 		var phone = rowsToInsert["phone"];
 		if( isNaN(phone) || !( phone.startsWith("08")  )){
 			res.render('main-form', {msg: 'Nomor telfon berawal 08, jangan pakai spasi', Addresses: ret});
+			return;
+		}
+		var n_price = rowsToInsert["price"];
+		if((isNaN(n_price) && n_price != "default") || parseInt(n_price, 10) <= 142000 || parseInt(n_price, 10) > 426000){
+			res.render('main-form', {msg: 'Harga minimal seharga modal, maksimal 3x modal', Addresses: ret});
 			return;
 		}
 		rowsToInsert["address_id"] = ret[rowsToInsert["address_id"]];
@@ -151,7 +158,12 @@ app.post('/submit', [
 			  if (error) throw new Error(error);
 				var cost = JSON.parse(body).rajaongkir.results[0].costs[0].cost[0].value;
 				rowsToInsert['cost'] = cost;
-				price = seller_price[seller_id.toUpperCase()];
+				if(n_price == "default") {
+					price = seller_price[seller_id.toUpperCase()];
+				} else{
+					price = parseInt(n_price, 10);
+				}				
+				delete rowsToInsert['price'];
 				rowsToInsert['price'] = price;
 				rowsToInsert['total_cost'] = cost + price;
 				rowsToInsert['subdistrict_id'] = sub_id;
@@ -183,13 +195,13 @@ app.post('/checkorder', [
 	], (req, res) => {
 		const errors = validationResult(req);
 		const rowsToInsert = req.body;
-		if(!valid_seller.includes(rowsToInsert["checkSid"])){
+		if(!valid_seller.includes(rowsToInsert["checkSid"].toUpperCase())){
 			res.render('main-form', {msg: 'Mohon isi Kode Penjual dengan benar', Addresses: ret});
 			return;
 		}
 		var sid = rowsToInsert["checkSid"];
 		//var data = {"a":["A1","B1","C1","D1", "E1","F1","G1","H1"], "b":["A12","B12","C12","D12", "E12","F12","G12","H2"]};
-		var data = gapi.authenticateAndGet(sid) ;
+		var data = gapi.authenticateAndGet(sid.toUpperCase()) ;
 		data.then(function(result) {
 			var orders = {};
 			for(var i = 0; i < result.length; i++){
@@ -203,7 +215,7 @@ app.post('/checkorder', [
 					} else if(parseInt(x[15]) == 2){
 						stat= "Selesai (Terkirim)"
 					}
-					orders[i] = [x[1], x[10],x[12],x[2],x[13],x[14],stat,x[16]];
+					orders[i] = [x[1], x[10],x[12],x[2],x[13],x[14],stat,x[16], x[7]];
 				}
 			}
 			res.render("cek-pesanan", {orders:orders});

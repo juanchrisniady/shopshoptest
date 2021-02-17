@@ -38,6 +38,10 @@ html
                             option= addr
                 br
                 .perlabel
+                    label(for = "price") Harga Barang:
+                    input(type = "text", name = "price", value = "default")
+                br
+                .perlabel
                     label(for = "shipping") Pemilihan kurir
                     .radiocontainer
                         input(type = "radio", name = "shipping", id="jnt", value="jnt")

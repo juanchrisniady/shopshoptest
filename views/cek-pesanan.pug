@@ -1,5 +1,5 @@
 doctype html
-mixin session(name, subs, province, phone, order_date, waybill, status, end_date)
+mixin session(name, subs, province, phone, order_date, waybill, status, end_date, price)
   tr
     td.session(data-sort-value="#{name}")
       .flex.sm
@@ -9,6 +9,7 @@ mixin session(name, subs, province, phone, order_date, waybill, status, end_date
             span.phone #{phone}&nbsp;-&nbsp;
             span.subs #{subs},&nbsp;
             span.prov #{province}
+    td.min(data-label="price") #{price}
     td.min(data-label="order_date") #{order_date}
     td.min(data-label="waybill") #{waybill}
     td.min(data-label="status") #{status}
@@ -37,13 +38,14 @@ html
                      thead(data-header="true")
                        tr
                          th(data-sort-column="true") Penerima
+                         th(data-sort-column="true") Harga_Barang
                          th(data-sort-column="true") Tanggal_Beli
                          th(data-sort-column="true") Resi
                          th(data-sort-column="true") Status
                          th(data-sort-column="true") Waktu_Selesai
                      tbody(data-body="true")
                        each order in orders ? orders : []
-                           +session(order[0],order[1],order[2],order[3], order[4],order[5],order[6], order[7])
+                           +session(order[0],order[1],order[2],order[3], order[4],order[5],order[6], order[7], order[8])
 
 
         
