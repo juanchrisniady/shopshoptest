@@ -45,6 +45,11 @@ app.get('/', function(req, res){
   
 });
 
+
+$(document).ready(function() {
+    $('#order-table').DataTable();
+} );
+
 function setup(req, res){
 	
 	fs.readFile(SUBS_PATH, (err, content) => {
