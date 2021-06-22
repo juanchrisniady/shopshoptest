@@ -12,8 +12,6 @@ const multer          = require('multer');
 const request 		  = require("request");
 const fs              = require('fs');
 const moment          = require('moment');
-const js         = require('./js/jquery-3.5.1.js');
-const dt          = require('./js/jquery.dataTables.min.js');
 
 const app             = express();
 const ret = {};
@@ -27,9 +25,6 @@ const ORDER_ID_NAME = "TEKNIA";
 const ORDER_ID_LOW = 1020;
 var ORDER_ID_CURR = 0;
 
-$(document).ready(function() {
-    $('#order-table').DataTable();
-} );
 // view engine setup
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
