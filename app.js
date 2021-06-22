@@ -1,3 +1,7 @@
+$(document).ready(function() {
+    $('#order-table').DataTable();
+} );
+
 const gapi = require("./utils/gapi");
 const validation = require("./utils/validation")
 const createError     = require('http-errors');
@@ -46,9 +50,7 @@ app.get('/', function(req, res){
 });
 
 
-$(document).ready(function() {
-    $('#order-table').DataTable();
-} );
+
 
 function setup(req, res){
 	
