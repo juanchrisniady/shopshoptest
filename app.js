@@ -12,8 +12,8 @@ const multer          = require('multer');
 const request 		  = require("request");
 const fs              = require('fs');
 const moment          = require('moment');
-const moment          = require('./js/jquery-3.5.1.js');
-const moment          = require('./js/jquery.dataTables.min.js');
+const js         = require('./js/jquery-3.5.1.js');
+const dt          = require('./js/jquery.dataTables.min.js');
 
 const app             = express();
 const ret = {};
