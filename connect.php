@@ -9,3 +9,4 @@ $db = $m->teknia;
  
 echo "Database mydb selected";
 >
+<link href="css/jquery.dataTables.min.css" rel="stylesheet"/>
