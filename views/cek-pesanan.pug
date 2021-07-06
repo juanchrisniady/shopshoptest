@@ -30,12 +30,12 @@ html
         div.banner
             h1.bannerText Cek Status Pesanan
         div.mainForm
-           input(type = "text", id= "search" placeholder="Cari kata...")
+           input(type = "text", id= "search" onkeyup="searchFunction()" placeholder="Cari kata...")
            .container
              .event-registration.reset
                .content.wide
                  .row-inset
-                   table.table-default.table-striped.table-bordered.sortable
+                   table.table-default.table-striped.table-bordered.sortable (id = "mytable")
                      thead(data-header="true")
                        tr
                          th(data-sort-column="true") Penerima
